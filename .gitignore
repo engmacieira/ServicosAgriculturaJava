@@ -1,0 +1,26 @@
+# --- Arquivos de IDE (Não enviar para o Git) ---
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# --- Compilação Maven (Lixo gerado pelo build) ---
+target/
+*.class
+*.jar
+*.war
+
+# --- Logs ---
+logs/
+*.log
+
+# --- Banco de Dados Local (Não enviar o banco real) ---
+*.db
+*.sqlite
+gestao.db
+
+# --- Sistema Operacional ---
+.DS_Store
+Thumbs.db
