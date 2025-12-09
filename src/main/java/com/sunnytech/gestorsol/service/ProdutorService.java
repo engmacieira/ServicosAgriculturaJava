@@ -7,53 +7,58 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 
-@Service // Diz ao Spring: "Aqui tem regras de negócio"
+@Service
 public class ProdutorService {
 
-    @Autowired // Injeção de Dependência: O Spring traz o Repository pronto pra gente
+    @Autowired
     private ProdutorRepository repository;
 
-    // Listagem com Paginação e Busca (Refatorando sua lógica do Python)
+    /**
+     * Lista produtores com paginação e filtro de busca (Nome).
+     * Ignora registros marcados como deletados (deletadoEm != null).
+     */
     public Page<Produtor> listarTodos(Pageable paginacao, String termoBusca) {
         if (termoBusca != null && !termoBusca.isBlank()) {
-            // Se tiver busca, usamos um método customizado (vamos adicionar no Repo rapidinho)
-            // Por enquanto, vamos buscar pelo nome para simplificar a migração inicial
-            return repository.findByNomeContainingIgnoreCase(termoBusca, paginacao);
+            // Busca por nome ignorando maiúsculas/minúsculas E garantindo que não foi deletado
+            return repository.findByNomeContainingIgnoreCaseAndDeletadoEmIsNull(termoBusca, paginacao);
         }
-        // Se não, traz tudo paginado (filtrando os ativos, claro)
-        return repository.findByAtivoTrue(paginacao);
+        // Traz todos que não têm data de deleção
+        return repository.findByDeletadoEmIsNull(paginacao);
     }
 
     public Produtor buscarPorId(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produtor não encontrado")); 
-                // Numa aplicação real, usaríamos uma Exception personalizada (ResourceNotFoundException)
+                .orElseThrow(() -> new RuntimeException("Produtor não encontrado com ID: " + id));
     }
 
     public Produtor salvar(Produtor produtor) {
-        // Regra de Negócio: Verificar se CPF já existe antes de salvar?
-        // O banco já tem a constraint unique, mas aqui poderíamos tratar melhor.
+        // Aqui você pode adicionar validações extras antes de salvar (ex: verificar CPF duplicado manualmente)
         return repository.save(produtor);
     }
 
     public Produtor atualizar(Long id, Produtor dadosAtualizados) {
         Produtor produtorExistente = buscarPorId(id);
         
-        // Atualizamos apenas os campos permitidos
+        // Atualizamos apenas os dados cadastrais, preservando ID e datas
         produtorExistente.setNome(dadosAtualizados.getNome());
+        produtorExistente.setApelido(dadosAtualizados.getApelido());
         produtorExistente.setCpfCnpj(dadosAtualizados.getCpfCnpj());
         produtorExistente.setTelefone(dadosAtualizados.getTelefone());
-        produtorExistente.setEndereco(dadosAtualizados.getEndereco());
-        // Não atualizamos dataCadastro nem ID, por segurança
+        produtorExistente.setRegiao(dadosAtualizados.getRegiao());
+        produtorExistente.setReferencia(dadosAtualizados.getReferencia());
         
         return repository.save(produtorExistente);
     }
 
     public void inativar(Long id) {
         Produtor produtor = buscarPorId(id);
-        produtor.setAtivo(false); // Soft Delete: Apenas marcamos como inativo
+        
+        // Lógica de Soft Delete compatível com seu banco legado:
+        // Define a data atual na coluna 'deletado_em' em vez de apagar o registro.
+        produtor.setDeletadoEm(LocalDateTime.now());
+        
         repository.save(produtor);
     }
 }

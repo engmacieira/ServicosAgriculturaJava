@@ -27,7 +27,7 @@ public class GestorSolApplication extends Application {
         
         // Usamos o Contexto do Spring para carregar o FXML. 
         // Isso permite usar @Autowired dentro dos Controllers da tela!
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/lista_produtores.fxml"));
         
         // Esta linha mágica diz: "Se o Controller precisar de injeção, use o Spring"
         loader.setControllerFactory(applicationContext::getBean);

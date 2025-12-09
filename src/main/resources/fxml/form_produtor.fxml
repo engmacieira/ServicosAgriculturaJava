@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.sunnytech.gestorsol.view.FormProdutorController">
+    
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Label text="Cadastro de Produtor" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10.0" vgap="10.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="200.0" prefWidth="300.0" />
+        </columnConstraints>
+        
+        <Label text="Nome Completo: *" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNome" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Apelido:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtApelido" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="CPF / CNPJ:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtCpf" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Telefone:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtTelefone" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Região:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtRegiao" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        
+        <Label text="Ponto de Referência:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtReferencia" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <HBox spacing="10.0" alignment="CENTER_RIGHT">
+        <Button text="Cancelar" onAction="#aoCancelar"/>
+        <Button text="Salvar" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" onAction="#aoSalvar"/>
+    </HBox>
+</VBox>
